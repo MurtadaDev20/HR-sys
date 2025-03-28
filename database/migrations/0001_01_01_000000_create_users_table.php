@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('employee_id')->nullable(); 
-            $table->string('role')->default('employee'); //  admin, hr, manager, employee
+            $table->string('phone')->nullable();
+            $table->date('hire_date')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('manager_id')->nullable();
+            $table->decimal('basic_salary', 10, 2)->default(0);
+            $table->string('role')->default('employee');
             $table->rememberToken();
             $table->timestamps();
         });
