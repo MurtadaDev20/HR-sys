@@ -78,12 +78,12 @@ class LeaveRequestResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
-        return [
-            LeaveChart::class,
-        ];
-    }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         LeaveChart::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {

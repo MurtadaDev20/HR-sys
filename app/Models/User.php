@@ -91,4 +91,9 @@ class User extends Authenticatable
         return $this->hasMany(Payroll::class);
     }
 
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
+
 }
