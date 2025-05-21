@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Leave;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\User;
+use App\Jobs\SendVacationRequestEmail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
 class VacationRequestController extends Controller
 {
     public function index()
@@ -26,6 +30,7 @@ class VacationRequestController extends Controller
         $typeVacation = LeaveType::all();
         return view('employ.vacation-request', compact('typeVacation', 'totalVacationDays', 'usedVacationDays', 'remainingVacationDays'));
     }
+
     public function store(Request $request)
     {
         // Validate the request
@@ -42,7 +47,7 @@ class VacationRequestController extends Controller
         $days = $startDate->diffInDays($endDate) + 1;
 
         // Create the vacation request
-        $vacationRequest = \App\Models\LeaveRequest::create([
+        $leaveRequest = LeaveRequest::create([
             'user_id' => auth()->id(),
             'leave_type_id' => $validated['vacationType'],
             'start_date' => $validated['startDate'],
@@ -51,6 +56,21 @@ class VacationRequestController extends Controller
             'note' => $validated['reason'],
             'status' => 'pending'
         ]);
+
+        // Get the employee's manager
+        $employee = auth()->user();
+        $manager = User::find($employee->manager_id);
+
+        // Dispatch the email job if manager exists
+        if ($manager) {
+            Log::info('Dispatching email job', [
+                'employee' => $employee->name,
+                'manager' => $manager->email,
+                'request_id' => $leaveRequest->id
+            ]);
+
+            SendVacationRequestEmail::dispatch($leaveRequest, $employee, $manager);
+        }
 
         return redirect()->route('vacation-request')
             ->with('success', 'Vacation request submitted successfully!');

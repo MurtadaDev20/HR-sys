@@ -12,12 +12,6 @@
                 <a href="{{ route('dashboard') }}" class="hover:text-red-300 transition-colors flex items-center">
                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                 </a>
-                <a href="#" class="hover:text-red-300 transition-colors flex items-center">
-                    <i class="fas fa-users mr-2"></i>Employees
-                </a>
-                <a href="#" class="hover:text-red-300 transition-colors flex items-center">
-                    <i class="fas fa-calendar-check mr-2"></i>Attendance
-                </a>
                 <a href="{{ route('vacation-request') }}" class="hover:text-red-300 transition-colors flex items-center">
                     <i class="fas fa-umbrella-beach mr-2"></i>Vacation Request
                 </a>

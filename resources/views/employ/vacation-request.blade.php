@@ -88,7 +88,7 @@
         </div>
     </main>
 
-    {{-- <script>
+    <script>
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('show');
@@ -104,7 +104,7 @@
                 document.getElementById('duration').value = diffDays;
             }
         }
-    </script> --}}
+    </script>
     {{-- <script>
         // Sample data for recent requests
         const recentRequests = [{

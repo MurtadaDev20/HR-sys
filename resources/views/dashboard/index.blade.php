@@ -1,8 +1,25 @@
 @extends('body.head')
 
 @section('content')
+
+
     <!-- Main Content -->
     <main class="container mx-auto px-4 pt-24">
+        <!-- Welcome Section -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover border-t-4 border-blue-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-user-circle text-2xl text-blue-500 mr-3"></i>
+                    <h2 class="text-2xl font-bold text-gray-800">Welcome, {{ Auth::user()->name }}!</h2>
+                </div>
+                <p class="text-gray-600">Here's your attendance overview for today.</p>
+            </div>
+            <div class="hidden md:block">
+                <span class="text-sm text-gray-500">{{ now()->format('l, F j, Y') }}</span>
+            </div>
+        </div>
+    </div>
         <!-- Fingerprint Section -->
         <div class="bg-white rounded-xl shadow-lg p-8 mb-8 text-center card-hover">
             <div class="max-w-md mx-auto">
@@ -144,7 +161,7 @@
         </div>
     </main>
 
-    {{-- <script>
+    <script>
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenu.classList.toggle('show');
@@ -197,7 +214,7 @@
                     '<span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> Scanning Failed';
             }
         }
-    </script> --}}
+    </script>
 
     <script>
         async function scanFingerprint() {

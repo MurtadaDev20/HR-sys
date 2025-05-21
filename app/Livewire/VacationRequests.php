@@ -13,6 +13,13 @@ class VacationRequests extends Component
     public $selectedRequest = null;
     public $showModal = false;
 
+    #[On('leave-request-approved')]
+    public function refreshRequests()
+    {
+        // Reload your data here
+        $this->getFilteredRequestsProperty(); // or just call $this->render() if you're loading data in render()
+    }
+
     public function mount()
     {
         $this->loadRequests();
@@ -28,7 +35,6 @@ class VacationRequests extends Component
 
         // Get leave requests from employees in those departments
         $this->requests = LeaveRequest::with('user.department')
-            ->where('status', 'pending')
             ->whereHas('user', function ($query) use ($departmentIds) {
                 $query->where('role', 'employee')
                       ->whereIn('department_id', $departmentIds);
@@ -42,7 +48,7 @@ class VacationRequests extends Component
                     'startDate' => $req->start_date,
                     'endDate' => $req->end_date,
                     'duration' => \Carbon\Carbon::parse($req->start_date)->diffInDays($req->end_date) + 1,
-                    'reason' => $req->reason,
+                    'reason' => $req->note,
                     'status' => $req->status,
                 ];
             });
@@ -88,12 +94,23 @@ class VacationRequests extends Component
 
         $this->selectedRequest['status'] = 'approved';
         $this->close();
+        $this->loadRequests();
+
+        
     }
 
     public function reject()
     {
+        $leaveRequest = LeaveRequest::find($this->selectedRequest['id']);
+        $leaveRequest->update([
+            'status' => 'rejected',
+            'approved_at' => now(),
+            'approved_by' => auth()->user()->id,
+
+        ]);
         $this->selectedRequest['status'] = 'rejected';
         $this->close();
+        $this->loadRequests();
     }
 
     public function render()
